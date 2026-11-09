@@ -4,11 +4,8 @@
 React»: сторінка «Меню кав'ярні». Інструкція:
 https://denysmatsevych.github.io/web-development-2026/react/labs/lab-4/
 
-Компоненти вже винесено в теку `src/components/`, але сторінка поки лише
-показує дані: поле пошуку й прапорець нічого не роблять. Ви додасте стан
-(`useState`), щоб вони запрацювали, і збережете фільтри між
-перезавантаженнями сторінки (`useEffect`). Функція фільтрування лежить у
-`src/filterMenu.js`, дані меню — у `src/data.js`, стилі — у `src/index.css`.
+Сторінка показує меню кав'ярні з пошуком, фільтром наявності та збереженням
+вибраних фільтрів між перезавантаженнями.
 
 ## Команди
 
@@ -28,9 +25,9 @@ https://denysmatsevych.github.io/web-development-2026/react/labs/lab-4/
 
 ```mermaid
 flowchart TD
-  App -->|"menu"| FilterableMenuTable
-  FilterableMenuTable -->|"filterText, inStockOnly, onFilterTextChange, onInStockOnlyChange"| SearchBar
-  SearchBar -.->|"onFilterTextChange, onInStockOnlyChange"| FilterableMenuTable
+  App --> FilterableMenuTable
+  FilterableMenuTable -->|"filterText, inStockOnly, onFilterTextChange, onInStockOnlyChange, onReset"| SearchBar
+  SearchBar -.->|"onFilterTextChange, onInStockOnlyChange, onReset"| FilterableMenuTable
   FilterableMenuTable -->|"menu, filterText, inStockOnly"| MenuTable
   App --> CafeInfo
   MenuTable -->|"category"| MenuCategory["MenuCategory × 3"]

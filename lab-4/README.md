@@ -22,19 +22,28 @@ https://denysmatsevych.github.io/web-development-2026/react/labs/lab-4/
 
 ## Потік даних
 
-Нижче — ієрархія компонентів. Підпишіть на стрілках пропси й додайте
-пунктирні стрілки (§4.5): суцільна стрілка — пропси, які батьківський
-компонент передає дочірньому; пунктирна — дані, що повертаються вгору через
-функцію-обробник, або запис у сховище поза React. GitHub показує цей блок
-діаграмою; перевірити її до `git push` можна в https://mermaid.live/.
+Суцільні стрілки показують пропси, які батьківський компонент передає
+дочірньому; пунктирні — оновлення стану через обробники або запис у сховище
+поза React.
 
 ```mermaid
 flowchart TD
-  App -->|"filterText, inStockOnly, onFilterTextChange, onInStockOnlyChange"| SearchBar
-  SearchBar -.->|"onFilterTextChange, onInStockOnlyChange"| App
-  App -->|"menu, filterText, inStockOnly"| MenuTable
+  App -->|"menu"| FilterableMenuTable
+  FilterableMenuTable -->|"filterText, inStockOnly, onFilterTextChange, onInStockOnlyChange"| SearchBar
+  SearchBar -.->|"onFilterTextChange, onInStockOnlyChange"| FilterableMenuTable
+  FilterableMenuTable -->|"menu, filterText, inStockOnly"| MenuTable
   App --> CafeInfo
   MenuTable -->|"category"| MenuCategory["MenuCategory × 3"]
   MenuCategory -->|"item"| MenuItemRow["MenuItemRow × 4, 3, 3"]
-  App -.->|"menu.filterText, menu.inStockOnly"| localStorage["localStorage"]
+  FilterableMenuTable -.->|"menu.filterText, menu.inStockOnly"| localStorage["localStorage"]
 ```
+
+## Колокація стану
+
+При зміні пошукового тексту React DevTools підсвічує повторні рендери. Кількість
+видимих категорій і позицій після фільтрації залежить від запиту.
+
+| Етап | Компоненти, що оновлюються |
+|---|---|
+| До колокації | `App`, `SearchBar`, `MenuTable`, `MenuCategory` (усі видимі), `MenuItemRow` (усі видимі), `CafeInfo` |
+| Після колокації | `FilterableMenuTable`, `SearchBar`, `MenuTable`, `MenuCategory` (усі видимі), `MenuItemRow` (усі видимі) |

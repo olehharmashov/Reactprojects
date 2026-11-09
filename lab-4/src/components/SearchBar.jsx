@@ -1,8 +1,8 @@
 export default function SearchBar({
   filterText,
-  setFilterText,
   inStockOnly,
-  setInStockOnly,
+  onFilterTextChange,
+  onInStockOnlyChange,
 }) {
   return (
     <search className="search-bar">
@@ -11,13 +11,13 @@ export default function SearchBar({
         placeholder="Пошук у меню"
         aria-label="Пошук у меню"
         value={filterText}
-        onChange={(event) => setFilterText(event.target.value)}
+        onChange={(e) => onFilterTextChange(e.target.value)}
       />
       <label>
         <input
           type="checkbox"
           checked={inStockOnly}
-          onChange={(event) => setInStockOnly(event.target.checked)}
+          onChange={(e) => onInStockOnlyChange(e.target.checked)}
         />{' '}
         Лише в наявності
       </label>

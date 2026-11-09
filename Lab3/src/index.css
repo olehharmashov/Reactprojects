@@ -1,6 +1,5 @@
 /* Стилі всієї сторінки. Класи (.app, .search-bar, .menu-table, .category,
-   .item, .unavailable) уже стоять у розмітці App.jsx: переносьте їх у
-   компоненти разом із розміткою. */
+   .item, .unavailable) розташовані у відповідних компонентах. */
 
 :root {
   font-family: Inter, system-ui, 'Segoe UI', Roboto, sans-serif;

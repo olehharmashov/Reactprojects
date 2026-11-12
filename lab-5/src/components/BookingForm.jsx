@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { describeBooking } from '../describeBooking.js'
 import GuestsStepper from './GuestsStepper.jsx'
 
+
 export default function BookingForm() {
   const [booking, setBooking] = useState(null)
   const [comment, setComment] = useState('')
@@ -33,7 +34,7 @@ export default function BookingForm() {
           <input type="time" name="time" required />
         </label>
       </div>
-      <GuestsStepper />
+      <GuestsStepper defaultValue={2} />
       <label>
         Коментар
         <textarea
@@ -55,5 +56,6 @@ export default function BookingForm() {
         {booking && describeBooking(booking)}
       </p>
     </form>
+    
   )
 }

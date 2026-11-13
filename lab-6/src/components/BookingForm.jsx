@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { startTransition, useActionState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm, useWatch } from 'react-hook-form'
+import { sendBooking } from '../api.js'
 import { bookingSchema } from '../bookingSchema.js'
 import GuestsStepper from './GuestsStepper.jsx'
-import { describeBooking } from '../describeBooking.js'
 
 const defaultValues = {
   name: '',
@@ -15,7 +15,6 @@ const defaultValues = {
 }
 
 export default function BookingForm() {
-  const [booking, setBooking] = useState(null)
   const {
     register,
     control,
@@ -31,9 +30,19 @@ export default function BookingForm() {
     mode: 'onTouched',
   })
   const comment = useWatch({ control, name: 'comment' })
+  const [result, dispatch, isPending] = useActionState(bookTable, null)
+
+  async function bookTable(previousResult, booking) {
+    void previousResult
+    if (booking === null) return null
+    const response = await sendBooking(booking)
+    if (response.ok) startTransition(() => reset())
+    return response
+  }
 
   function onValid(data) {
-    setBooking(data)
+    if (isPending) return
+    startTransition(() => dispatch(data))
   }
 
   function handleKeyDown(e) {
@@ -45,7 +54,7 @@ export default function BookingForm() {
   function handleReset() {
     setFocus('name')
     reset()
-    setBooking(null)
+    startTransition(() => dispatch(null))
   }
 
   return (
@@ -142,13 +151,18 @@ export default function BookingForm() {
         {comment.length} / 200
       </p>
       <div className="actions">
-        <button type="submit">Забронювати</button>
+        <button type="submit" aria-disabled={isPending}>
+          {isPending ? 'Надсилаємо…' : 'Забронювати'}
+        </button>
         <button type="button" onClick={handleReset}>
           Очистити
         </button>
       </div>
-      <p role="status" className="status">
-        {booking && describeBooking(booking)}
+      <p
+        role="status"
+        className={result?.ok === false ? 'status error' : 'status'}
+      >
+        {result?.message}
       </p>
     </form>
   )

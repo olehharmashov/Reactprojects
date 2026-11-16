@@ -1,14 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useLocalStorage } from '../hooks/useLocalStorage.js'
 
 export default function FavoriteButton({ productId, name }) {
   const key = `favorite:${productId}`
-  const [isFavorite, setIsFavorite] = useState(
-    () => localStorage.getItem(key) === 'true',
-  )
-
-  useEffect(() => {
-    localStorage.setItem(key, String(isFavorite))
-  }, [key, isFavorite])
+  const [isFavorite, setIsFavorite] = useLocalStorage(key, false)
 
   return (
     <button
@@ -16,7 +10,7 @@ export default function FavoriteButton({ productId, name }) {
       className="favorite-button"
       aria-label={`До обраного: ${name}`}
       aria-pressed={isFavorite}
-      onClick={() => setIsFavorite(!isFavorite)}
+      onClick={() => setIsFavorite((favorite) => !favorite)}
     >
       {isFavorite ? '♥' : '♡'}
     </button>

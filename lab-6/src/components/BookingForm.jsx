@@ -15,16 +15,7 @@ const defaultValues = {
 }
 
 export default function BookingForm() {
-  const {
-    register,
-    control,
-    handleSubmit,
-    reset,
-    setFocus,
-    getValues,
-    trigger,
-    formState: { errors },
-  } = useForm({
+  const { register, control, handleSubmit, reset, setFocus, getValues, trigger, formState: { errors } } = useForm({
     resolver: zodResolver(bookingSchema),
     defaultValues,
     mode: 'onTouched',
@@ -33,7 +24,6 @@ export default function BookingForm() {
   const [result, dispatch, isPending] = useActionState(bookTable, null)
 
   async function bookTable(previousResult, booking) {
-    void previousResult
     if (booking === null) return null
     const response = await sendBooking(booking)
     if (response.ok) startTransition(() => reset())

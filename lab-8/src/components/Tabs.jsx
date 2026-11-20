@@ -29,7 +29,7 @@ function List({ children, ...props }) {
   )
 }
 
-function Tab({ value, children, className = '', ...props }) {
+function Tab({ value, children, ...props }) {
   const tabs = useTabs()
   const selected = tabs.value === value
   const tabId = `${tabs.id}-tab-${encodeURIComponent(value)}`
@@ -64,7 +64,6 @@ function Tab({ value, children, className = '', ...props }) {
       type="button"
       role="tab"
       id={tabId}
-      className={`${className}${selected ? `${className ? ' ' : ''}active` : ''}`}
       aria-selected={selected}
       aria-controls={panelId}
       tabIndex={selected ? 0 : -1}

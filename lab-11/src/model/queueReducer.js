@@ -92,7 +92,9 @@ export function queueReducer(state, action) {
             [order.id]: {
               ...order,
               items: order.items.map((item) =>
-                item.id === action.itemId ? { ...item, done: !item.done } : item,
+                item.id === action.itemId
+                  ? { ...item, done: !item.done }
+                  : item,
               ),
             },
           },

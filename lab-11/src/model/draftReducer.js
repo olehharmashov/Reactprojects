@@ -1,3 +1,4 @@
+import { produce } from 'immer'
 import { defaultMilk } from '../data/menu.js'
 
 /**
@@ -38,59 +39,52 @@ export const emptyDraft = Object.freeze({
  * Невідома дія — помилка, у тексті якої є назва дії.
  *
  */
-export function draftReducer(state, action) {
+export const draftReducer = produce((draft, action) => {
   switch (action.type) {
     case 'customer_changed':
-      return { ...state, customerName: action.name }
+      draft.customerName = action.name
+      break
 
-    case 'drink_added':
-      return {
-        ...state,
-        items: [
-          ...state.items,
-          {
-            id: action.id,
-            drink: action.drink,
-            size: 'M',
-            milk: defaultMilk(action.drink),
-            syrups: [],
-          },
-        ],
-      }
+    case 'drink_added': {
+      draft.items.push({
+        id: action.id,
+        drink: action.drink,
+        size: 'M',
+        milk: defaultMilk(action.drink),
+        syrups: [],
+      })
+      break
+    }
 
-    case 'size_chosen':
-      return {
-        ...state,
-        items: state.items.map((item) =>
-          item.id === action.itemId ? { ...item, size: action.size } : item,
-        ),
-      }
+    case 'size_chosen': {
+      const item = draft.items.find((item) => item.id === action.itemId)
+      if (item) item.size = action.size
+      break
+    }
 
-    case 'milk_chosen':
-      return {
-        ...state,
-        items: state.items.map((item) =>
-          item.id === action.itemId ? { ...item, milk: action.milk } : item,
-        ),
-      }
+    case 'milk_chosen': {
+      const item = draft.items.find((item) => item.id === action.itemId)
+      if (item) item.milk = action.milk
+      break
+    }
 
-    case 'syrup_toggled':
-      return {
-        ...state,
-        items: state.items.map((item) => {
-          if (item.id !== action.itemId) return item
-          const syrups = item.syrups.includes(action.syrup)
-            ? item.syrups.filter((syrup) => syrup !== action.syrup)
-            : [...item.syrups, action.syrup]
-          return { ...item, syrups }
-        }),
+    case 'syrup_toggled': {
+      const item = draft.items.find((item) => item.id === action.itemId)
+      if (item) {
+        const syrupIndex = item.syrups.indexOf(action.syrup)
+        if (syrupIndex === -1) item.syrups.push(action.syrup)
+        else item.syrups.splice(syrupIndex, 1)
       }
+      break
+    }
 
-    case 'item_removed':
-      return {
-        ...state,
-        items: state.items.filter((item) => item.id !== action.itemId),
-      }
+    case 'item_removed': {
+      const itemIndex = draft.items.findIndex(
+        (item) => item.id === action.itemId,
+      )
+      if (itemIndex !== -1) draft.items.splice(itemIndex, 1)
+      break
+    }
 
     case 'draft_cleared':
       return emptyDraft
@@ -98,4 +92,4 @@ export function draftReducer(state, action) {
     default:
       throw new Error(`Unknown draft action: ${action.type}`)
   }
-}
+})

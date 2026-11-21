@@ -105,6 +105,14 @@ describe('Нормалізований стан черги', () => {
         ],
       },
     })
+    expect(state.orders.byId['o-new']).toMatchObject({
+      customerId: 'c-new',
+    })
+    expect(state.orders.byId['o-new']).not.toHaveProperty('customer')
+    expect(state.customers.byId['c-new']).toEqual({
+      id: 'c-new',
+      name: 'Петро',
+    })
     const newOrders = selectColumn(state, 'new')
     expect(newOrders.map((order) => order.number)).toEqual([
       44,

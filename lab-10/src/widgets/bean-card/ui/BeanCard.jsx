@@ -1,8 +1,8 @@
 import { useId } from 'react'
-import { paths } from './paths.js'
-import AddToCartButton from './AddToCartButton.jsx'
-import FavoriteButton from './FavoriteButton.jsx'
-import Link from './Link.jsx'
+import { paths } from '../../../shared/config/index.js'
+import { AddToCartButton } from '../../../features/add-to-cart/index.js'
+import { FavoriteButton } from '../../../features/favorite/index.js'
+import Link from '../../../shared/ui/Link.jsx'
 
 export default function BeanCard({ bean, compact = false }) {
   const titleId = useId()

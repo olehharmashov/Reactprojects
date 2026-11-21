@@ -1,4 +1,4 @@
-import { useLocalStorage } from './useLocalStorage.js'
+import { useLocalStorage } from '../../../shared/lib/useLocalStorage.js'
 
 export default function FavoriteButton({ productId, name }) {
   const [isFavorite, setIsFavorite] = useLocalStorage(

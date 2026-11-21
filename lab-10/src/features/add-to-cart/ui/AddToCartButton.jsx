@@ -1,6 +1,6 @@
-import { withAnalytics } from './withAnalytics.jsx'
-import { useCart } from './useCart.js'
-import Button from './Button.jsx'
+import { withAnalytics } from '../../../shared/lib/withAnalytics.jsx'
+import { useCart } from '../../../entities/cart/index.js'
+import Button from '../../../shared/ui/Button.jsx'
 
 const TrackedButton = withAnalytics(Button, 'add_to_cart')
 

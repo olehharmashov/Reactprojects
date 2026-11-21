@@ -1,5 +1,5 @@
-import { grindOptions } from './grindOptions.js'
-import { useLocalStorage } from '../../shared/useLocalStorage.js'
+import { grindOptions } from '../model/grindOptions.js'
+import { useLocalStorage } from '../../../shared/lib/useLocalStorage.js'
 
 export default function GrindPicker() {
   const [grind, setGrind] = useLocalStorage('grind', 'beans')

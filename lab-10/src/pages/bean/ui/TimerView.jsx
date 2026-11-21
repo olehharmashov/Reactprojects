@@ -1,6 +1,6 @@
-import { withAnalytics } from '../../shared/withAnalytics.jsx'
-import { formatTime } from './formatTime.js'
-import Button from '../../shared/Button.jsx'
+import { withAnalytics } from '../../../shared/lib/withAnalytics.jsx'
+import { formatTime } from '../lib/formatTime.js'
+import Button from '../../../shared/ui/Button.jsx'
 
 const TimerButton = withAnalytics(Button, 'timer_control')
 

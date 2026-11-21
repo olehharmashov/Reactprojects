@@ -1,12 +1,12 @@
 import BrewGuide from './BrewGuide.jsx'
-import NotFound from '../../shared/NotFound.jsx'
+import NotFound from '../../../shared/ui/NotFound.jsx'
 import ProductCard from './ProductCard.jsx'
 import RelatedProducts from './RelatedProducts.jsx'
 import ReviewList from './ReviewList.jsx'
 import Tabs from './Tabs.jsx'
-import { beans } from '../../shared/beans.js'
-import { brewMethods } from './brewMethods.js'
-import { reviews } from './reviews.js'
+import { beans } from '../../../entities/bean/index.js'
+import { brewMethods } from '../model/brewMethods.js'
+import { reviews } from '../model/reviews.js'
 
 export default function BeanPage({ beanId }) {
   const bean = beans.find((item) => item.id === beanId)

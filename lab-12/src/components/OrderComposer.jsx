@@ -1,11 +1,13 @@
 import { useId, useReducer, useRef } from 'react'
 import { drinks, priceOf } from '../data/menu.js'
 import { draftReducer, emptyDraft } from '../model/draftReducer.js'
+import { useQueueDispatch } from '../model/queueContext.js'
 import DraftItem from './DraftItem.jsx'
 
-export default function OrderComposer({ onPlace }) {
+export default function OrderComposer() {
   const titleId = useId()
   const nameRef = useRef(null)
+  const queueDispatch = useQueueDispatch()
   const [draft, dispatch] = useReducer(draftReducer, emptyDraft)
   const total = draft.items.reduce((sum, item) => sum + priceOf(item), 0)
 
@@ -19,7 +21,17 @@ export default function OrderComposer({ onPlace }) {
 
   function handleSubmit(e) {
     e.preventDefault()
-    onPlace({ customerName: draft.customerName.trim(), items: draft.items })
+    queueDispatch({
+      type: 'order_placed',
+      order: {
+        id: crypto.randomUUID(),
+        customer: {
+          id: crypto.randomUUID(),
+          name: draft.customerName.trim(),
+        },
+        items: draft.items,
+      },
+    })
     dispatch({ type: 'draft_cleared' })
     // Порожня форма вимикає «Надіслати бариста», і кнопка втратила б фокус.
     // Він переходить на ім'я гостя: можна приймати наступне замовлення.

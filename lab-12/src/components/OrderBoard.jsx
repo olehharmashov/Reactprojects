@@ -1,6 +1,5 @@
-import { use } from 'react'
 import { selectColumn } from '../model/queueReducer.js'
-import { QueueContext } from '../model/queueContext.js'
+import { useQueue } from '../model/queueContext.js'
 import OrderColumn from './OrderColumn.jsx'
 import OrderCard from './OrderCard.jsx'
 
@@ -12,7 +11,7 @@ const columns = [
 ]
 
 export default function OrderBoard({ onOpen }) {
-  const { queue } = use(QueueContext)
+  const { queue } = useQueue()
 
   return (
     <div className="board">

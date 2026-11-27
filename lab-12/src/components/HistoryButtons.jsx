@@ -1,13 +1,18 @@
 import { useRef } from 'react'
 import { flushSync } from 'react-dom'
+import { useQueue, useQueueDispatch } from '../model/queueContext.js'
 
 /**
  * «Скасувати дію» й «Повторити дію» для черги. Кожна кнопка вимкнена, коли
  * нема чого скасовувати чи повторювати.
  */
-export default function HistoryButtons({ canUndo, canRedo, onUndo, onRedo }) {
+export default function HistoryButtons() {
+  const { canUndo, canRedo } = useQueue()
+  const dispatch = useQueueDispatch()
   const undoRef = useRef(null)
   const redoRef = useRef(null)
+  const onUndo = () => dispatch({ type: 'undo' })
+  const onRedo = () => dispatch({ type: 'redo' })
 
   // Кнопка, яку вимкнуло її ж натискання (кроків більше нема), втрачає фокус,
   // і він падає на початок сторінки. Тому flushSync одразу оновлює сторінку,

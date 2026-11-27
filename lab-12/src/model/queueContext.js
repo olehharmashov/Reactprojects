@@ -1,4 +1,4 @@
-import { createContext } from 'react'
+import { createContext, use } from 'react'
 
 /**
  * Контексти черги замовлень і хуки, які їх читають.
@@ -16,10 +16,18 @@ export const QueueDispatchContext = createContext(null)
 
 /** { queue, canUndo, canRedo } з найближчого QueueProvider. */
 export function useQueue() {
-  throw new Error('Not implemented: useQueue')
+  const queue = use(QueueContext)
+  if (queue === null) {
+    throw new Error('useQueue must be used within a QueueProvider')
+  }
+  return queue
 }
 
 /** dispatch ред'юсера черги з найближчого QueueProvider. */
 export function useQueueDispatch() {
-  throw new Error('Not implemented: useQueueDispatch')
+  const dispatch = use(QueueDispatchContext)
+  if (dispatch === null) {
+    throw new Error('useQueueDispatch must be used within a QueueProvider')
+  }
+  return dispatch
 }

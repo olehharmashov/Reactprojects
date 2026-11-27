@@ -1,7 +1,8 @@
-import { use, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { flushSync } from 'react-dom'
 import { describeItem, priceOf } from '../data/menu.js'
-import { QueueDispatchContext } from '../model/queueContext.js'
+import { selectOrder } from '../model/queueReducer.js'
+import { useQueue, useQueueDispatch } from '../model/queueContext.js'
 
 const statusTitle = {
   new: 'Нове',
@@ -14,16 +15,18 @@ const statusTitle = {
  * Панель «Деталі замовлення»: напої замовлення й поле для імені гостя.
  * Без замовлення (order — null чи undefined) не показує нічого.
  */
-export default function OrderDetails({ order, onClose }) {
+export default function OrderDetails({ orderId, onClose }) {
+  const { queue } = useQueue()
   const headingRef = useRef(null)
-  const orderId = order?.id
+  const order = selectOrder(queue, orderId)
+  const selectedOrderId = order?.id
 
   // Щойно відкрито інше замовлення, фокус переходить на заголовок панелі:
   // так панель видно й на вузькому екрані, а програма зчитування з екрана
   // читає, що відкрилося.
   useEffect(() => {
-    if (orderId) headingRef.current.focus()
-  }, [orderId])
+    if (selectedOrderId) headingRef.current.focus()
+  }, [selectedOrderId])
 
   if (!order) return null
 
@@ -70,7 +73,7 @@ export default function OrderDetails({ order, onClose }) {
 // кнопка, на яких був фокус, тому після збереження flushSync одразу оновлює
 // сторінку, а onSaved переводить фокус на заголовок панелі з новим ім'ям.
 function RenameForm({ customer, onSaved }) {
-  const dispatch = use(QueueDispatchContext)
+  const dispatch = useQueueDispatch()
 
   function handleSubmit(e) {
     e.preventDefault()

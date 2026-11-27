@@ -9,6 +9,7 @@ import {
   queueReducer,
   selectOrder,
 } from './model/queueReducer.js'
+import { QueueContext, QueueDispatchContext } from './model/queueContext.js'
 import { createHistory, withUndo } from './model/withUndo.js'
 
 // Створюється один раз, під час імпорту: у кожному рендері App отримує той
@@ -37,35 +38,40 @@ export default function App() {
   }
 
   return (
-    <div className="app">
-      <header className="app-header">
-        <h1>Черга замовлень</h1>
-        <p className="lead">
-          Нове замовлення приймають у формі, а далі воно йде колонками зліва
-          направо.
-        </p>
-      </header>
-      <div className="workspace">
-        <OrderComposer onPlace={handlePlace} />
-        <main className="queue">
-          <HistoryButtons
-            canUndo={history.past.length > 0}
-            canRedo={history.future.length > 0}
-            onUndo={() => dispatch({ type: 'undo' })}
-            onRedo={() => dispatch({ type: 'redo' })}
-          />
-          <OrderDetails
-            order={openedOrder}
-            dispatch={dispatch}
-            onClose={() => setOpenedId(null)}
-          />
-          <OrderBoard
-            queue={queue}
-            dispatch={dispatch}
-            onOpen={(order) => setOpenedId(order.id)}
-          />
-        </main>
-      </div>
-    </div>
+    <QueueContext
+      value={{
+        queue,
+        canUndo: history.past.length > 0,
+        canRedo: history.future.length > 0,
+      }}
+    >
+      <QueueDispatchContext value={dispatch}>
+        <div className="app">
+          <header className="app-header">
+            <h1>Черга замовлень</h1>
+            <p className="lead">
+              Нове замовлення приймають у формі, а далі воно йде колонками зліва
+              направо.
+            </p>
+          </header>
+          <div className="workspace">
+            <OrderComposer onPlace={handlePlace} />
+            <main className="queue">
+              <HistoryButtons
+                canUndo={history.past.length > 0}
+                canRedo={history.future.length > 0}
+                onUndo={() => dispatch({ type: 'undo' })}
+                onRedo={() => dispatch({ type: 'redo' })}
+              />
+              <OrderDetails
+                order={openedOrder}
+                onClose={() => setOpenedId(null)}
+              />
+              <OrderBoard onOpen={(order) => setOpenedId(order.id)} />
+            </main>
+          </div>
+        </div>
+      </QueueDispatchContext>
+    </QueueContext>
   )
 }

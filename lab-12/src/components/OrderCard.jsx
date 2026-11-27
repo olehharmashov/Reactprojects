@@ -1,11 +1,13 @@
-import { useId } from 'react'
+import { use, useId } from 'react'
 import { flushSync } from 'react-dom'
 import { describeItem } from '../data/menu.js'
+import { QueueDispatchContext } from '../model/queueContext.js'
 
 // Кнопка наступного кроку в кожній колонці, крім «Видані».
 const nextStep = { new: 'Почати', brewing: 'Готово', ready: 'Видати' }
 
-export default function OrderCard({ order, dispatch, onOpen }) {
+export default function OrderCard({ order, onOpen }) {
+  const dispatch = use(QueueDispatchContext)
   const titleId = useId()
   const isBrewing = order.status === 'brewing'
   const allDone = order.items.every((item) => item.done)

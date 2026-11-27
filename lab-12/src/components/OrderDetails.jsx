@@ -1,6 +1,7 @@
-import { useEffect, useRef } from 'react'
+import { use, useEffect, useRef } from 'react'
 import { flushSync } from 'react-dom'
 import { describeItem, priceOf } from '../data/menu.js'
+import { QueueDispatchContext } from '../model/queueContext.js'
 
 const statusTitle = {
   new: 'Нове',
@@ -13,7 +14,7 @@ const statusTitle = {
  * Панель «Деталі замовлення»: напої замовлення й поле для імені гостя.
  * Без замовлення (order — null чи undefined) не показує нічого.
  */
-export default function OrderDetails({ order, dispatch, onClose }) {
+export default function OrderDetails({ order, onClose }) {
   const headingRef = useRef(null)
   const orderId = order?.id
 
@@ -58,7 +59,6 @@ export default function OrderDetails({ order, dispatch, onClose }) {
       <RenameForm
         key={`${order.id}:${order.customer.name}`}
         customer={order.customer}
-        dispatch={dispatch}
         onSaved={() => headingRef.current.focus()}
       />
     </section>
@@ -69,7 +69,9 @@ export default function OrderDetails({ order, dispatch, onClose }) {
 // поле знову починає з поточного імені. Разом із формою зникає й поле чи
 // кнопка, на яких був фокус, тому після збереження flushSync одразу оновлює
 // сторінку, а onSaved переводить фокус на заголовок панелі з новим ім'ям.
-function RenameForm({ customer, dispatch, onSaved }) {
+function RenameForm({ customer, onSaved }) {
+  const dispatch = use(QueueDispatchContext)
+
   function handleSubmit(e) {
     e.preventDefault()
     const name = new FormData(e.currentTarget).get('name').trim()

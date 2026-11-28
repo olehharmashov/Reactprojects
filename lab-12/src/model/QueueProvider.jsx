@@ -1,28 +1,33 @@
 /**
- * Провайдер стану черги та dispatch ред'юсера для всіх дочірніх компонентів.
+ * Провайдер Redux store черги для всіх дочірніх компонентів.
  */
-import { useReducer } from 'react'
+import { useState } from 'react'
+import { configureStore } from '@reduxjs/toolkit'
+import { Provider } from 'react-redux'
 import { loadOrders } from '../data/orders.js'
 import { createInitialState, queueReducer } from './queueReducer.js'
-import { QueueContext, QueueDispatchContext } from './queueContext.js'
+import { QueueReduxContext } from './queueContext.js'
 import { createHistory, withUndo } from './withUndo.js'
 
 const undoableQueue = withUndo(queueReducer)
 
+function createQueueStore() {
+  const initialHistory = createHistory(createInitialState(loadOrders()))
+
+  return configureStore({
+    reducer: (history = initialHistory, action) =>
+      action.type.startsWith('@@redux/')
+        ? history
+        : undoableQueue(history, action),
+  })
+}
+
 export default function QueueProvider({ children }) {
-  const [history, dispatch] = useReducer(undoableQueue, null, () =>
-    createHistory(createInitialState(loadOrders())),
-  )
+  const [store] = useState(createQueueStore)
 
   return (
-    <QueueContext
-      value={{
-        queue: history.present,
-        canUndo: history.past.length > 0,
-        canRedo: history.future.length > 0,
-      }}
-    >
-      <QueueDispatchContext value={dispatch}>{children}</QueueDispatchContext>
-    </QueueContext>
+    <Provider context={QueueReduxContext} store={store}>
+      {children}
+    </Provider>
   )
 }

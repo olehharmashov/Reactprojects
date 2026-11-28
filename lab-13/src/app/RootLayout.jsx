@@ -1,7 +1,7 @@
+import { Link, NavLink, Outlet } from 'react-router'
 import { signOut, useUser } from '../shared/auth/session.js'
 
-// Шапка сайту над кожною сторінкою. Посилання в ній поки звичайні <a>:
-// перехід за кожним перезавантажує весь сайт.
+// Спільний макет сайту: шапка над сторінкою дочірнього маршруту.
 export default function RootLayout() {
   const user = useUser()
 
@@ -13,21 +13,21 @@ export default function RootLayout() {
   return (
     <div className="site">
       <header className="site-header">
-        <a className="brand" href="/">
+        <Link className="brand" to="/">
           Кінотеатр
-        </a>
+        </Link>
         <nav aria-label="Основна навігація">
           <ul className="site-nav">
             <li>
-              <a href="/">Афіша</a>
+              <NavLink to="/">Афіша</NavLink>
             </li>
             <li>
-              <a href="/schedule">Розклад</a>
+              <NavLink to="/schedule">Розклад</NavLink>
             </li>
             {user ? (
               <>
                 <li>
-                  <a href="/account">Кабінет</a>
+                  <NavLink to="/account">Кабінет</NavLink>
                 </li>
                 <li>
                   <button type="button" onClick={handleSignOut}>
@@ -37,13 +37,15 @@ export default function RootLayout() {
               </>
             ) : (
               <li>
-                <a href="/login">Увійти</a>
+                <NavLink to="/login">Увійти</NavLink>
               </li>
             )}
           </ul>
         </nav>
       </header>
-      <main className="page">{/* §4.4: тут сторінка */}</main>
+      <main className="page">
+        <Outlet />
+      </main>
     </div>
   )
 }

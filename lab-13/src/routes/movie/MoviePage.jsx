@@ -1,13 +1,12 @@
-import { Link } from 'react-router'
+import { Link, useParams } from 'react-router'
 import NotFoundPage from '../../shared/components/NotFoundPage.jsx'
 import Poster from '../../shared/components/Poster.jsx'
 import { findMovie } from '../../shared/data/movies.js'
 import { sessionsOfMovie } from '../../shared/data/sessions.js'
 import { formatDateTime } from '../../shared/utils/format.js'
 
-// Сторінка фільму. Зараз id фільму вона отримує через проп movieId; у §4.4
-// вона має брати його з адреси сторінки.
-export default function MoviePage({ movieId }) {
+export default function MoviePage() {
+  const { movieId } = useParams()
   const movie = findMovie(movieId)
   if (!movie) return <NotFoundPage title="Фільм не знайдено" />
 

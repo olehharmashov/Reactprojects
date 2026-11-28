@@ -1,5 +1,9 @@
 import RootLayout from './RootLayout.jsx'
 import NotFoundPage from '../shared/components/NotFoundPage.jsx'
+import AccountLayout from '../routes/account/AccountLayout.jsx'
+import ProfilePage from '../routes/account/ProfilePage.jsx'
+import TicketsPage from '../routes/account/TicketsPage.jsx'
+import BookingPage from '../routes/booking/BookingPage.jsx'
 import LoginPage from '../routes/login/LoginPage.jsx'
 import MoviePage from '../routes/movie/MoviePage.jsx'
 import MoviesPage from '../routes/movies/MoviesPage.jsx'
@@ -17,6 +21,15 @@ export const routes = [
       { path: 'movies/:movieId', Component: MoviePage },
       { path: 'schedule', Component: SchedulePage },
       { path: 'login', Component: LoginPage },
+      {
+        path: 'account',
+        Component: AccountLayout,
+        children: [
+          { index: true, Component: ProfilePage },
+          { path: 'tickets', Component: TicketsPage },
+        ],
+      },
+      { path: 'booking/:sessionId', Component: BookingPage },
       { path: '*', Component: NotFoundPage },
     ],
   },

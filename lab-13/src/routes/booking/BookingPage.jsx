@@ -1,3 +1,4 @@
+import { useNavigate, useParams } from 'react-router'
 import { useState } from 'react'
 import { useUser } from '../../shared/auth/session.js'
 import NotFoundPage from '../../shared/components/NotFoundPage.jsx'
@@ -7,9 +8,9 @@ import { bookSeats, useTakenSeats } from '../../shared/data/tickets.js'
 import { formatDateTime, plural } from '../../shared/utils/format.js'
 import SeatMap from './SeatMap.jsx'
 
-// Бронювання місць на сеанс. Зараз id сеансу сторінка отримує через проп
-// sessionId; у §4.5 вона має брати його з адреси сторінки.
-export default function BookingPage({ sessionId }) {
+export default function BookingPage() {
+  const { sessionId } = useParams()
+  const navigate = useNavigate()
   const user = useUser()
   const taken = useTakenSeats(sessionId)
   const [chosen, setChosen] = useState([])
@@ -28,7 +29,7 @@ export default function BookingPage({ sessionId }) {
 
   function handleBook() {
     bookSeats(user.email, session.id, chosen)
-    // §4.5: після бронювання — перехід у «Мої квитки».
+    navigate('/account/tickets')
   }
 
   return (

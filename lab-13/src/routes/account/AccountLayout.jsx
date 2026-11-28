@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router'
+import { NavLink, Outlet } from 'react-router'
 
 // Макет кабінету: заголовок і меню кабінету над сторінкою кабінету.
 export default function AccountLayout() {
@@ -8,14 +8,18 @@ export default function AccountLayout() {
       <nav aria-label="Меню кабінету">
         <ul className="account-nav">
           <li>
-            <NavLink to="/account">Профіль</NavLink>
+            <NavLink to="/account" end>
+              Профіль
+            </NavLink>
           </li>
           <li>
             <NavLink to="/account/tickets">Мої квитки</NavLink>
           </li>
         </ul>
       </nav>
-      <div className="account-page">{/* §4.5: тут сторінка кабінету */}</div>
+      <div className="account-page">
+        <Outlet />
+      </div>
     </div>
   )
 }

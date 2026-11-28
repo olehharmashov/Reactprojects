@@ -1,13 +1,14 @@
-import { Link, NavLink, Outlet } from 'react-router'
+import { Link, NavLink, Outlet, useNavigate } from 'react-router'
 import { signOut, useUser } from '../shared/auth/session.js'
 
 // Спільний макет сайту: шапка над сторінкою дочірнього маршруту.
 export default function RootLayout() {
   const user = useUser()
+  const navigate = useNavigate()
 
   function handleSignOut() {
     signOut()
-    // §4.6: після виходу — перехід на «Афішу».
+    navigate('/')
   }
 
   return (

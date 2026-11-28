@@ -1,4 +1,6 @@
 import RootLayout from './RootLayout.jsx'
+import { guestOnly, requireUser } from './authMiddleware.js'
+import HydrateFallback from '../shared/components/HydrateFallback.jsx'
 import NotFoundPage from '../shared/components/NotFoundPage.jsx'
 import AccountLayout from '../routes/account/AccountLayout.jsx'
 import ProfilePage from '../routes/account/ProfilePage.jsx'
@@ -16,20 +18,26 @@ export const routes = [
   {
     path: '/',
     Component: RootLayout,
+    HydrateFallback,
     children: [
       { index: true, Component: MoviesPage },
       { path: 'movies/:movieId', Component: MoviePage },
       { path: 'schedule', Component: SchedulePage },
-      { path: 'login', Component: LoginPage },
       {
-        path: 'account',
-        Component: AccountLayout,
+        middleware: [requireUser],
         children: [
-          { index: true, Component: ProfilePage },
-          { path: 'tickets', Component: TicketsPage },
+          {
+            path: 'account',
+            Component: AccountLayout,
+            children: [
+              { index: true, Component: ProfilePage },
+              { path: 'tickets', Component: TicketsPage },
+            ],
+          },
+          { path: 'booking/:sessionId', Component: BookingPage },
         ],
       },
-      { path: 'booking/:sessionId', Component: BookingPage },
+      { path: 'login', middleware: [guestOnly], Component: LoginPage },
       { path: '*', Component: NotFoundPage },
     ],
   },
